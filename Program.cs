@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Quiz.API.Data;
+using Quiz.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Quiz") ?? "Data Source=Quiz.db";
@@ -7,6 +8,7 @@ var connectionString = builder.Configuration.GetConnectionString("Quiz") ?? "Dat
 // Add services to the container.
 builder.Services.AddSqlite<QuizDb>(connectionString);
 builder.Services.AddControllers();
+builder.Services.AddScoped<IQuizService, QuizService>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
