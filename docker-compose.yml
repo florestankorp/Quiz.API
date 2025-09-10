@@ -1,0 +1,19 @@
+services:
+  quiz-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: quiz-api
+    ports:
+      - "8080:8080"
+    environment:
+      # Program.cs reads "Quiz", not "Default"
+      - ConnectionStrings__Quiz=Data Source=/app/data/quiz.db
+    volumes:
+      - quizdb:/app/data
+    restart: unless-stopped
+    # Uncomment if you need AMD64 on Apple Silicon
+    # platform: linux/amd64
+
+volumes:
+  quizdb:
