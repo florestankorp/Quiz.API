@@ -5,8 +5,5 @@ using Quiz.API.Models;
 
 public class QuizDb(DbContextOptions<QuizDb> options) : DbContext(options)
 {
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Stats>().HasData(new Stats { Id = 1, TotalQuizzesTaken = 0, AverageScore = 0 });
-    }
+    public DbSet<Stats> Stats { get; set; } = null!;
 }
