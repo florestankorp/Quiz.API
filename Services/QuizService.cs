@@ -1,6 +1,7 @@
 namespace Quiz.API.Services;
 
 using Microsoft.EntityFrameworkCore;
+using Quiz.API.Configuration;
 using Quiz.API.Data;
 using Quiz.API.Models;
 
@@ -17,7 +18,13 @@ public class QuizService(QuizDb db) : IQuizService
     public async Task<double?> GetAverageScoreAsync(CancellationToken cancellationToken = default)
     {
         var stats = await _db.Stats.FirstOrDefaultAsync(cancellationToken);
-        return stats?.AverageScore;
+
+        if (stats == null)
+        {
+            return null;
+        }
+
+        return stats.AverageScore;
     }
 
     public async Task AddScoreAsync(int score, CancellationToken cancellationToken = default)
@@ -25,11 +32,10 @@ public class QuizService(QuizDb db) : IQuizService
         var stats = await _db.Stats.FirstOrDefaultAsync(cancellationToken);
         if (stats == null)
         {
-            stats = new Stats { AverageScore = 0, TotalQuizzesTaken = 0 };
+            stats = new Stats { TotalQuizzesTaken = Defaults.Quiz.InitialCount, AverageScore = Defaults.Quiz.InitialAverageScore };
             await _db.Stats.AddAsync(stats, cancellationToken);
         }
 
-        // Update running average in one step
         stats.AverageScore = ((stats.AverageScore * stats.TotalQuizzesTaken) + score) / (stats.TotalQuizzesTaken + 1);
         stats.TotalQuizzesTaken++;
 

@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Quiz.API.Configuration;
 using Quiz.API.Data;
 using Quiz.API.Models;
 using Quiz.API.Services;
-
-const int INITIAL_QUIZ_COUNT = 0;
-const double INITIAL_AVERAGE_SCORE = 0.0;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Quiz") ?? "Data Source=Quiz.db";
@@ -28,7 +26,7 @@ using (var scope = app.Services.CreateScope())
 
     if (!await db.Stats.AnyAsync())
     {
-        db.Stats.Add(new Stats { TotalQuizzesTaken = INITIAL_QUIZ_COUNT, AverageScore = INITIAL_AVERAGE_SCORE });
+        db.Stats.Add(new Stats { TotalQuizzesTaken = Defaults.Quiz.InitialCount, AverageScore = Defaults.Quiz.InitialAverageScore });
         await db.SaveChangesAsync();
     }
 }

@@ -14,6 +14,7 @@ public class QuizController(IQuizService quizService) : ControllerBase
     public async Task<ActionResult<double?>> Get(CancellationToken cancellationToken)
     {
         var avg = await _quizService.GetAverageScoreAsync(cancellationToken);
+
         if (avg is null)
         {
             return NotFound();
